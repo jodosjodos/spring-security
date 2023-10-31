@@ -191,7 +191,7 @@ public class UserController {
 
                     )
 
-            }, method = "update user password"
+            }, method = "update user password api"
 
 //make  changes
     )

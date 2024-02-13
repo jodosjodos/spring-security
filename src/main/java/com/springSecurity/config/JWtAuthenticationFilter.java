@@ -61,6 +61,7 @@ public class JWtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.setContext(securityContext);
 
                 }
+                log.info(userDetails.toString());
 
             }
 

@@ -13,7 +13,6 @@ import com.springSecurity.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -99,8 +98,10 @@ public class UserServiceImpl implements UserService {
             SecurityContext securityContext = SecurityContextHolder.getContext();
             User user = (User) securityContext.getAuthentication().getPrincipal();
             log.info(user.getRole().name());
+            if (!user.getRole().toString().equals("ADMIN")) { // Check if the user's role is not "ADMIN"
+                throw new ApiRequestException("Unauthorized role. You must be an ADMIN to access this endpoint", HttpStatus.UNAUTHORIZED);
+            }
             return userRepository.findAll();
-
         } catch (Exception ex) {
             throw ex;
         }

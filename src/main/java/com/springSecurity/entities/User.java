@@ -19,18 +19,20 @@ public class User implements UserDetails {
     private Integer id;
     private String fullName;
 
-    @Column(nullable = false,unique = true,updatable = false)
+    @Column(nullable = false, unique = true, updatable = false)
     private String email;
     private String phoneNumber;
     @Column(nullable = false)
 
     private String password;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of( new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

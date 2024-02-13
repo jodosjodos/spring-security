@@ -1,6 +1,7 @@
 package com.springSecurity.services.impl;
 
 
+import com.springSecurity.entities.User;
 import com.springSecurity.errors.exception.ApiRequestException;
 import com.springSecurity.services.JWTService;
 import io.jsonwebtoken.Claims;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -31,13 +33,10 @@ public class JWTServiceImpl implements JWTService {
 
     @Override
     public String generateToken(UserDetails userDetails) {
-        return Jwts
-                .builder()
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 3))
-                .signWith(getSigninkey(), SignatureAlgorithm.HS256)
-                .compact();
+        User user = (User) userDetails;
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole());
+        return generateRefreshToken(claims, userDetails);
     }
 
     @Override

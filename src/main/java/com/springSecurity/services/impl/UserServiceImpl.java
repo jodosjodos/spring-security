@@ -13,6 +13,7 @@ import com.springSecurity.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -94,7 +95,15 @@ public class UserServiceImpl implements UserService {
     //     geta ll users
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        try {
+            SecurityContext securityContext = SecurityContextHolder.getContext();
+            User user = (User) securityContext.getAuthentication().getPrincipal();
+            log.info(user.getRole().name());
+            return userRepository.findAll();
+
+        } catch (Exception ex) {
+            throw ex;
+        }
     }
 
     @Override
@@ -112,9 +121,9 @@ public class UserServiceImpl implements UserService {
             log.info(" user  password have been updated successfully");
             return
                     UpdatePasswordResponse.builder()
-                    .email(userEmail)
-                    .msg(" user with this email have updated his password successfully")
-                    .build();
+                            .email(userEmail)
+                            .msg(" user with this email have updated his password successfully")
+                            .build();
         } else {
             throw new ApiRequestException(" please  make sure that old password match with that one  you have saved in db", HttpStatus.BAD_REQUEST);
         }

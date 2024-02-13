@@ -17,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -36,12 +35,14 @@ public class JWtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
-        if (StringUtils.isEmpty(authHeader) || !org.apache.commons.lang3.StringUtils.startsWith(authHeader, "Bearer")) {
-
+        if (authHeader == null) {
             filterChain.doFilter(request, response);
             return;
         }
-
+        if (!authHeader.startsWith("Bearer")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 //             check if token have been provided if not then return error require him to provide  bearer token
         try {
             jwt = authHeader.substring(7);

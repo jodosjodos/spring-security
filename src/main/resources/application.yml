@@ -1,49 +1,52 @@
 server:
-    error:
-        include-binding-errors: always
-        include-exception: true
-        include-message: always
-    port: 8081
+  error:
+    include-binding-errors: always
+    include-exception: true
+    include-message: always
+  port: 8081
+
 spring:
-    datasource:
-        username: jodosSpringboot
-        password: jodos2006
-        url:   jdbc:mysql://localhost:3306/BondiAI
-        driver-class-name: com.mysql.cj.jdbc.Driver
-    devtools:
-        livereload:
-            enabled: true
-        restart:
-            enabled: true
-    jpa:
-        hibernate:
-            ddl-auto: update
+  datasource:
+    username: jodosSpringboot
+    password: jodos2006
+    url: jdbc:mysql://localhost:3306/BondiAI
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
 
-        properties:
-            hibernate:
-                dialect: org.hibernate.dialect.MySQL8Dialect
-                format-sql : true
-        show-sql: true
-    security:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format-sql: true
+    show-sql: true
+  security:
 
-        user:
-            password: jodos2006
-            name: jodos
-    mail:
-      host: smtp.gmail.com
-      port: 587
-      username: jeandedieu2030@gmail.com
-      password: edks czyt jcex dkse
-      properties:
-        mail:
-            smtp:
-                auth: true
-                starttls:
-                    enable:true
-                    required:true
-            transport:
-                protocol:smtp
+    user:
+      password: jodos2006
+      name: jodos
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jeandedieu2030@gmail.com
+    password: edks czyt jcex dkse
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable:true
+            required:true
+        transport:
+          protocol:smtp
+  mvc:
+    throw-exception-if-no-handler-found: true
 jwt:
-    secret:jodosjodos
-    expiration:86400000
+  secret:jodosjodos
+  expiration:86400000
 

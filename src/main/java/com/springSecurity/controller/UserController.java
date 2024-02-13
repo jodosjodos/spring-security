@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -159,6 +160,8 @@ public class UserController {
     )
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/users")
+    //TODO:not  working well
+    @RolesAllowed("ADMIN")
     public ResponseEntity<List<User>> getAllUsers() {
         log.info(" call get all  users");
         return ResponseEntity.ok().body(userService.getAllUsers());

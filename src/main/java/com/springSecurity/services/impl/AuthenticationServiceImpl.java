@@ -86,11 +86,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 //                .user(user)
 //                .build();
         try {
+//            authentication manager
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getEmail(), signinRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+//            get logged user
             var user = (User) authentication.getPrincipal();
+//            generate token
             var jwt = jwtService.generateToken(user);
+//            generate refresh token
             var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
+//            response
             return JWtAuthenticationResponse.builder()
                     .refreshToken(refreshToken)
                     .token(jwt)

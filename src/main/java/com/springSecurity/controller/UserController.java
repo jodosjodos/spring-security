@@ -161,10 +161,8 @@ public class UserController {
     )
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/users")
-    //TODO:not  working well
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
-        log.info(" call get all  users");
         return ResponseEntity.ok().body(userService.getAllUsers());
     }
 

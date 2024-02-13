@@ -3,6 +3,7 @@ server:
         include-binding-errors: always
         include-exception: true
         include-message: always
+    port: 8081
 spring:
     datasource:
         username: jodosSpringboot

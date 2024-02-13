@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
-
+//sign up controller
     @Operation(
             description = " Register user and send email  that notify you that you have created account and you  with credentials you  have created with ",
             summary = "this is summary for  register user with email, password , phone number and full name",

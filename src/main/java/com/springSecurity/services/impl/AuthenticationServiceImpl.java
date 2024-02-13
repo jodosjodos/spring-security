@@ -73,18 +73,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public JWtAuthenticationResponse signin(SignInRequest signinRequest) {
 
-//        var user = userRepository.findByEmail(signinRequest.getEmail())
-//                .orElseThrow(() -> new ApiRequestException(" user not found", HttpStatus.NOT_FOUND));
-//        if (!passwordEncoder.matches(signinRequest.getPassword(), user.getPassword())) {
-//            throw new ApiRequestException(" invalid credentials", HttpStatus.UNAUTHORIZED);
-//        }
-//        var jwt = jwtService.generateToken(user);
-//        var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
-//        return JWtAuthenticationResponse.builder()
-//                .refreshToken(refreshToken)
-//                .token(jwt)
-//                .user(user)
-//                .build();
+
         try {
 //            authentication manager
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getEmail(), signinRequest.getPassword()));

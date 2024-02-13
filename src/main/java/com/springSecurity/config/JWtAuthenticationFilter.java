@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springSecurity.errors.JWtAuthenticationResponse;
 import com.springSecurity.errors.exception.ApiRequestException;
 import com.springSecurity.services.JWTService;
-import com.springSecurity.services.UserServiceSecurity;
+import com.springSecurity.services.impl.UserServiceSecurityImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ import java.io.IOException;
 public class JWtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
-    private final UserServiceSecurity userServiceSecurity;
+    private final UserServiceSecurityImpl userServiceSecurity;
 
 
     @Override
@@ -50,7 +50,7 @@ public class JWtAuthenticationFilter extends OncePerRequestFilter {
 
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                UserDetails userDetails = userServiceSecurity.userDetailsService().loadUserByUsername(userEmail);
+                UserDetails userDetails = userServiceSecurity.loadUserByUsername(userEmail);
 //  if user present add him or her to context so that I can access him to all my apis
                 if (jwtService.isTokenValid(jwt, userDetails)) {
                     SecurityContext securityContext = SecurityContextHolder.createEmptyContext();

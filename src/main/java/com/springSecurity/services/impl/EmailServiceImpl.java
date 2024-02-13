@@ -14,18 +14,19 @@ import org.springframework.stereotype.Service;
 @Data
 @Slf4j
 public class EmailServiceImpl implements EmailService {
-    private  final JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
     @Autowired
     @Value("${spring.mail.username}")
-    private String from ;
+    private String from;
+
     @Override
     public void sendSimpleEmailMessage(String to, String subject, String text) {
-        SimpleMailMessage simpleMailMessage= new SimpleMailMessage();
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(from);
-     simpleMailMessage.setTo(to);
-     simpleMailMessage.setSubject(subject);
-     simpleMailMessage.setText(text);
-     mailSender.send(simpleMailMessage);
-      log.info(" email send successfully");
+        simpleMailMessage.setTo(to);
+        simpleMailMessage.setSubject(subject);
+        simpleMailMessage.setText(text);
+        mailSender.send(simpleMailMessage);
+        log.info(" email send successfully");
     }
 }

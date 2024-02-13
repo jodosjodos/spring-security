@@ -14,6 +14,13 @@ import com.springSecurity.services.EmailService;
 import com.springSecurity.services.JWTService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +33,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JWTService jwtService;
     private final EmailService emailService;
+    private final AuthenticationManager authenticationManager;
 
-//     delete  user
+    //     delete  user
     @Override
     public User signUp(SignUpRequest signUpRequest) {
         User user = new User();
@@ -61,25 +69,45 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     }
 
-//     sign in user
+    //     sign in user
     @Override
     public JWtAuthenticationResponse signin(SignInRequest signinRequest) {
 
-        var user = userRepository.findByEmail(signinRequest.getEmail())
-                .orElseThrow(() -> new ApiRequestException(" user not found", HttpStatus.NOT_FOUND));
-        if (!passwordEncoder.matches(signinRequest.getPassword(), user.getPassword())) {
+//        var user = userRepository.findByEmail(signinRequest.getEmail())
+//                .orElseThrow(() -> new ApiRequestException(" user not found", HttpStatus.NOT_FOUND));
+//        if (!passwordEncoder.matches(signinRequest.getPassword(), user.getPassword())) {
+//            throw new ApiRequestException(" invalid credentials", HttpStatus.UNAUTHORIZED);
+//        }
+//        var jwt = jwtService.generateToken(user);
+//        var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
+//        return JWtAuthenticationResponse.builder()
+//                .refreshToken(refreshToken)
+//                .token(jwt)
+//                .user(user)
+//                .build();
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getEmail(), signinRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            var user = (User) authentication.getPrincipal();
+            var jwt = jwtService.generateToken(user);
+            var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
+            return JWtAuthenticationResponse.builder()
+                    .refreshToken(refreshToken)
+                    .token(jwt)
+                    .user(user)
+                    .build();
+        } catch (BadCredentialsException ex) {
             throw new ApiRequestException(" invalid credentials", HttpStatus.UNAUTHORIZED);
+        } catch (LockedException ex) {
+            throw new ApiRequestException(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+
+        } catch (Exception ex) {
+            throw new ApiRequestException(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+
         }
-        var jwt = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
-        return JWtAuthenticationResponse.builder()
-                .refreshToken(refreshToken)
-                .token(jwt)
-                .user(user)
-                .build();
     }
 
-//     get refresh token
+    //     get refresh token
     public JWtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         String userEmail = jwtService.extractUserName(refreshTokenRequest.getRefreshToken());
         var user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ApiRequestException(" user not found", HttpStatus.NOT_FOUND));

@@ -9,7 +9,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "login register ")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+    private final AuthenticationManager authenticationManager;
 
-
-//sign up controller
+    //sign up controller
     @Operation(
             description = " Register user and send email  that notify you that you have created account and you  with credentials you  have created with ",
             summary = "this is summary for  register user with email, password , phone number and full name",
@@ -51,7 +56,7 @@ public class AuthenticationController {
 
     }
 
-//    this is controller that implement login of user by providing password and email
+    //    this is controller that implement login of user by providing password and email
     @Operation(
             description = " Login user ",
             summary = "this is summary for how  login work you must provide password and email",
@@ -68,8 +73,10 @@ public class AuthenticationController {
                     )
             })
     @PostMapping("/signin")
-    public ResponseEntity<JWtAuthenticationResponse> signin(@RequestBody SignInRequest signInRequest) {
+    public ResponseEntity<?> signin(@RequestBody SignInRequest signInRequest) {
+//        JWtAuthenticationResponse
         return ResponseEntity.ok(authenticationService.signin(signInRequest));
+
     }
 
     //     generate new token using refresh token

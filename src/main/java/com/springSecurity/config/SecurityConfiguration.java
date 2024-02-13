@@ -1,7 +1,7 @@
 package com.springSecurity.config;
 
 import com.springSecurity.entities.Role;
-import com.springSecurity.services.UserServiceSecurity;
+import com.springSecurity.services.impl.UserServiceSecurityImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     private final JWtAuthenticationFilter jWtAuthenticationFilter;
-    private final UserServiceSecurity userServiceSecurity;
+    private final UserServiceSecurityImpl userServiceSecurity;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -60,7 +60,7 @@ public class SecurityConfiguration {
 
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userServiceSecurity.userDetailsService());
+        authenticationProvider.setUserDetailsService(userServiceSecurity);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }

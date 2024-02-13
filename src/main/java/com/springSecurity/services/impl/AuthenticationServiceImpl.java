@@ -42,7 +42,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setFullName(signUpRequest.getFullName());
         user.setEmail(signUpRequest.getEmail());
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
-        user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         boolean userExists = userRepository.findByEmail(signUpRequest.getEmail()).isPresent();
         if (userExists) {

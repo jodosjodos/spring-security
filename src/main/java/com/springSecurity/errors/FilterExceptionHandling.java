@@ -17,7 +17,7 @@ import java.util.*;
 
 @Slf4j
 @Component
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
+public class FilterExceptionHandling implements AuthenticationEntryPoint, Serializable {
 
     private static final long serialVersionUID = -7858869558953243875L;
 
@@ -34,7 +34,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
         errorDetails.put("error", "Unauthorized");
         errorDetails.put("message", "You are not authorised to access this endpoint");
         errorDetails.put("path", request.getRequestURI());
-        log.error(authException.toString());
         OutputStream out = response.getOutputStream();
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(out, errorDetails);

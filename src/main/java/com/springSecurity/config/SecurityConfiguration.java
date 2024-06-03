@@ -1,6 +1,7 @@
 package com.springSecurity.config;
 
 import com.springSecurity.entities.Role;
+import com.springSecurity.errors.JwtAuthenticationEntryPoint;
 import com.springSecurity.services.impl.UserServiceSecurityImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,7 @@ public class SecurityConfiguration {
 
     private final JWtAuthenticationFilter jWtAuthenticationFilter;
     private final UserServiceSecurityImpl userServiceSecurity;
+    private  final JwtAuthenticationEntryPoint exceptionHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,14 +44,14 @@ public class SecurityConfiguration {
                                 "/swagger-ui/**",
                                 "/webjars/**",
                                 "/swagger-ui.html",
-                                "/api/v1/auth/**").permitAll()
+                                "/api/v1/auth/**").
+                        permitAll()
                         .anyRequest().authenticated()
 
 
         ).sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-        ).authenticationProvider(authenticationProvider()).addFilterBefore(jWtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
+        ).authenticationProvider(authenticationProvider()).addFilterBefore(jWtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling((exception)->exception.authenticationEntryPoint(exceptionHandler));
         return http.build();
     }
 

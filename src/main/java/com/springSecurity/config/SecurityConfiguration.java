@@ -1,7 +1,7 @@
 package com.springSecurity.config;
 
 import com.springSecurity.entities.Role;
-import com.springSecurity.errors.JwtAuthenticationEntryPoint;
+import com.springSecurity.errors.FilterExceptionHandling;
 import com.springSecurity.services.impl.UserServiceSecurityImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +27,7 @@ public class SecurityConfiguration {
 
     private final JWtAuthenticationFilter jWtAuthenticationFilter;
     private final UserServiceSecurityImpl userServiceSecurity;
-    private  final JwtAuthenticationEntryPoint exceptionHandler;
+    private  final FilterExceptionHandling exceptionHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

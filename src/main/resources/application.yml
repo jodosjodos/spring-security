@@ -3,7 +3,7 @@ server:
     include-binding-errors: always
     include-exception: true
     include-message: always
-  port: 8081
+  port: 8080
 
 spring:
   datasource:

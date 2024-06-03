@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
         try {
             SecurityContext securityContext = SecurityContextHolder.getContext();
             User user = (User) securityContext.getAuthentication().getPrincipal();
-            //TODO:logical solution
+//            //TODO:logical solution
             if (!user.getRole().toString().equals("ADMIN")) {
                 // Check if the user's role is not "ADMIN"
                 throw new ApiRequestException("Unauthorized role. You must be an ADMIN to access this endpoint", HttpStatus.UNAUTHORIZED);

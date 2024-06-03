@@ -13,6 +13,7 @@ import com.springSecurity.services.AuthenticationService;
 import com.springSecurity.services.EmailService;
 import com.springSecurity.services.JWTService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,6 +29,7 @@ import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -44,6 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
         user.setRole(signUpRequest.getRole());
+        log.info(signUpRequest.toString());
         boolean userExists = userRepository.findByEmail(signUpRequest.getEmail()).isPresent();
         if (userExists) {
             throw new ApiRequestException(" user already exists", HttpStatus.CONFLICT);

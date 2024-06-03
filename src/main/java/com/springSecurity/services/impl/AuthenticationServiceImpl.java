@@ -43,6 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setEmail(signUpRequest.getEmail());
         user.setPhoneNumber(signUpRequest.getPhoneNumber());
         user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        user.setRole(signUpRequest.getRole());
         boolean userExists = userRepository.findByEmail(signUpRequest.getEmail()).isPresent();
         if (userExists) {
             throw new ApiRequestException(" user already exists", HttpStatus.CONFLICT);

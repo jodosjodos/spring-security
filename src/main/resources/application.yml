@@ -7,10 +7,10 @@ server:
 
 spring:
   datasource:
-    username: jodosSpringboot
+    username: jodos
     password: jodos2006
-    url: jdbc:mysql://localhost:3306/BondiAI
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://localhost:5432/spring-security
+    driver-class-name: org.postgresql.Driver
   devtools:
     livereload:
       enabled: true
